@@ -17,4 +17,17 @@ NOTE: Notebooks were run on Google Colab with Google Drive as data storage, henc
 
 Discussion:
 1. **Something Something Dataset:** The something something v2 dataset is very large and contains over 200000 videos and 174 classes. Hence, it is very time-consuming to train the model on this dataset. Training just 1 epoch on the dataset takes hours and reducing the training data introduces unbalanced classes (if done without further preprocessing of data). Best option would be to use a multi-GPU setup and train the model in a distributed training method.
-2. **Moving MNIST:** Training the models on this is also time-consuming, but manageable. Both ConvLSTM as well as SITH models were trained for 300 epochs (taking over 6 hours in each case). While we see better results for the ConvLSTM model, the SITH model fails to learn much. The reason for this might be because the SITH models are better when there is a temporal dependency across a longer period of time. In our case, we use 10 frames to predict the next 10 frames. This is suboptimal for SITH models. In order to better leverage the SITH model, it would be a better idea to use 1000 or more frames to predict the next 10 ( or more) frames. In such a case, SITH model can leverage the log compressed memory to better track the patterns across longer period of time. 
+2. **Moving MNIST:** Training the models on this is also time-consuming, but manageable. Both ConvLSTM as well as SITH models were trained for 300 epochs (taking over 6 hours in each case). While we see better results for the ConvLSTM model, the SITH model fails to learn much. The reason for this might be because the SITH models are better when there is a temporal dependency across a longer period of time. In our case, we use 10 frames to predict the next 10 frames. This is suboptimal for SITH models. In order to better leverage the SITH model, it would be a better idea to use 1000 or more frames to predict the next 10 ( or more) frames. In such a case, SITH model can leverage the log compressed memory to better track the patterns across longer period of time. It might also be helpful to train the convlstm model for a longer time in order to improve the results. Furthermore, currently the autoencoder architecture in both the models is set up in a way that it takes in 10 frames to predict the next 10 frames. A better architecture would be to use the 10 frames to predict the next 1 frame and then use the output as the input to the model and predict the next frame and do this recursively to predict the 10 frames one by one. 
+
+ConvLSTM (Moving MNIST) epoch 0: 
+![ConvLSTM epoch 0](https://github.com/J-Yash/convlstm-vs-sith/blob/main/images/convlstm_epoch_0.png)
+
+ConvLSTM (Moving MNIST) epoch 299:
+![ConvLSTM epoch 299](https://github.com/J-Yash/convlstm-vs-sith/blob/main/images/convlstm_epoch_299.png)
+
+SITH (Moving MNIST) epoch 0:
+![SITH epoch 0](https://github.com/J-Yash/convlstm-vs-sith/blob/main/images/sith_epoch_0.png)
+
+SITH (Moving MNIST) epoch 299: 
+![SITH epoch 299](https://github.com/J-Yash/convlstm-vs-sith/blob/main/images/sith_epoch_299.png)
+
